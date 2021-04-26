@@ -1,0 +1,67 @@
+{
+  "name": "vite-plugin-environment",
+  "version": "1.0.2",
+  "description": "Easily expose environment variables in Vite.js",
+  "keywords": [
+    "env",
+    "environment",
+    "variables",
+    "vite",
+    "vite-plugin",
+    "vitejs"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "jest",
+    "dev": "npm run build -- --watch",
+    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "clean": "rm -rf ./dist",
+    "release": "node scripts/release",
+    "postinstall": "husky install",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "prepublishOnly": "pinst --disable && npm run build",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags && pinst --enable"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ElMassimo/vite-plugin-environment"
+  },
+  "homepage": "https://github.com/ElMassimo/vite-plugin-environment",
+  "bugs": "https://github.com/ElMassimo/vite-plugin-environment/issues",
+  "author": "Máximo Mussini <maximomussini@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@mussi/eslint-config": "^0.5",
+    "@types/debug": "^4.1.5",
+    "@types/jest": "^26.0.22",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "conventional-changelog-cli": "^2.1.1",
+    "eslint": "^7.17.0",
+    "eslint-plugin-jest": "^24.3.5",
+    "fast-glob": "^3.2.5",
+    "husky": "^5.1.3",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "pinst": "^2.1.6",
+    "rollup": "^2.36.1",
+    "ts-jest": "^26.5.5",
+    "ts-node": "^9.1.1",
+    "tsup": "^3.11.0",
+    "typescript": "^4.1.3",
+    "vite": "^2.2.0"
+  },
+  "peerDependencies": {
+    "vite": "^2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix"
+    ]
+  }
+}

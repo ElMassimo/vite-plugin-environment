@@ -1,0 +1,7 @@
+{
+  "name": "vite-plugin-environment-tests",
+  "private": true,
+  "devDependencies": {
+    "vite-plugin-environment": "workspace:*"
+  }
+}
