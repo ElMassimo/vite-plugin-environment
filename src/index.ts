@@ -38,9 +38,9 @@ function defineProcessEnvVars (env: EnvVarDefaults, keys: string[], defaultValue
 }
 
 function throwMissingKeyError (key: string) {
-  throw new Error(`vite-plugin-environment: the \`${key}\` environment variable is undefined.\n\n` +
-    "You can pass an object with default values to suppress this warning.\n" +
-    "See https://github.com/ElMassimo/vite-plugin-environment for guidance."
+  throw new Error(`vite-plugin-environment: the \`${key}\` environment variable is undefined.\n\n`
+    + 'You can pass an object with default values to suppress this warning.\n'
+    + 'See https://github.com/ElMassimo/vite-plugin-environment for guidance.',
   )
 }
 

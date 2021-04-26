@@ -1,6 +1,6 @@
-import glob from 'fast-glob'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import glob from 'fast-glob'
 import { build, InlineConfig } from 'vite'
 
 type Fixture = 'a' | 'b'
@@ -21,7 +21,8 @@ describe('keys', () => {
     expect.assertions(1)
     try {
       await buildFixture('a', { mode: 'staging' })
-    } catch (error) {
+    }
+    catch (error) {
       expect(error.message).toMatch(/`API_KEY` environment variable is undefined/)
     }
     done()
@@ -40,7 +41,8 @@ describe('default values', () => {
     expect.assertions(1)
     try {
       await buildFixture('b', { mode: 'staging' })
-    } catch (error) {
+    }
+    catch (error) {
       expect(error.message).toMatch(/`API_KEY` environment variable is undefined/)
     }
     done()
