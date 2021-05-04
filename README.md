@@ -58,22 +58,6 @@ And then use them as:
 const apiKey = process.env.API_KEY
 ```
 
-This is equivalent to [manually configuring][define]:
-
-```js
-import { defineConfig } from 'vite'
-
-export default defineConfig({
-  define: {
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
-    'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
-  }
-})
-```
-
-except it will also use any variables provided by your `.env` files, and will
-__fail__ if any of the specified variables is _not defined_.
-
 ### Usage with default values
 
 You may instead provide an object which maps keys to their default values.
@@ -121,7 +105,7 @@ process.env.VUE_APP_NOT_SECRET_CODE
 
 ### Exposing variables differently
 
-When porting apps or using SSR it can be useful to expose variables in `process.env`, which is the default.
+When porting apps to Vite or using SSR it can be useful to expose variables in `process.env`, which is the default.
 
 In other cases, you may use the <kbd>defineOn</kbd> option to expose them in a different object, such as `import.meta.env`.
 
@@ -144,6 +128,24 @@ If you want to ignore `.env` files and only use values in `process.env`, you can
 ```js
 EnvironmentPlugin(['API_KEY'], { loadEnvFiles: false }),
 ```
+
+## Inside the box 📦
+
+The first example in this README is equivalent to [manually configuring][define]:
+
+```js
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  define: {
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+    'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
+  }
+})
+```
+
+except it will also use any variables provided by your `.env` files, and will
+__fail__ if any of the specified variables is _not defined_.
 
 ## Acknowledgements
 
