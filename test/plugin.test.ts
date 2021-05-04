@@ -3,7 +3,7 @@ import { join } from 'path'
 import glob from 'fast-glob'
 import { build, InlineConfig } from 'vite'
 
-type Fixture = 'a' | 'b'
+type Fixture = 'a' | 'b' | 'c'
 
 function compiledApp (name: Fixture) {
   const distPath = join(__dirname, 'fixtures', name, 'dist')
@@ -59,6 +59,35 @@ describe('default values', () => {
     expect.assertions(1)
     await buildFixture('b', { mode: 'development' })
     expect(compiledApp('b')).toContain('console.log("v3")')
+    done()
+  })
+})
+
+describe('advanced options', () => {
+  test('throws an error if an environment variable is missing', async (done) => {
+    expect.assertions(1)
+    try {
+      await buildFixture('c', { mode: 'staging' })
+    }
+    catch (error) {
+      expect(error.message).toMatch(/`API_KEY` environment variable is undefined/)
+    }
+    done()
+  })
+
+  test('replaces the variables without failing', async (done) => {
+    expect.assertions(2)
+    await buildFixture('c', { mode: 'production' })
+    expect(compiledApp('c')).toContain('console.log({}.VUE_APP_VERSION)')
+    expect(compiledApp('c')).toContain('window.apiKey="d2fab04aacaad208"')
+    done()
+  })
+
+  test('uses defaults only when not available', async (done) => {
+    expect.assertions(2)
+    await buildFixture('c', { mode: 'development' })
+    expect(compiledApp('c')).toContain('console.log("v3")')
+    expect(compiledApp('c')).toContain('window.apiKey="d2fab04aacaad208"')
     done()
   })
 })

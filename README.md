@@ -98,7 +98,44 @@ EnvironmentPlugin({
 
 Use `null` for optional variables, or `undefined` for variables that __must__ be provided.
 
-### Using only `process.env`
+## Configuration ⚙️
+
+Have in mind that you can add the plugin several times—passing different options to load different sets of variables.
+
+### Loading prefixed variables
+
+In some cases, it's useful to load all environment variables with a certain prefix.
+
+You can achieve that by passing `'all'` and providing the <kbd>prefix</kbd> option.
+
+```js
+EnvironmentPlugin('all', { prefix: 'VUE_APP_' }),
+EnvironmentPlugin('all', { prefix: 'REACT_APP_' }),
+```
+
+and then use it as usual:
+
+```js
+process.env.VUE_APP_NOT_SECRET_CODE
+```
+
+### Exposing variables differently
+
+When porting apps or using SSR it can be useful to expose variables in `process.env`, which is the default.
+
+In other cases, you may use the <kbd>defineOn</kbd> option to expose them in a different object, such as `import.meta.env`.
+
+```js
+EnvironmentPlugin({ APP_VERSION: 'local' }, { defineOn: 'import.meta.env' }),
+```
+
+and then use it as:
+
+```js
+const version = import.meta.env.APP_VERSION
+```
+
+### Ignoring `.env` files
 
 By default the plugin will load `.env` files using the same [strategy][meta env] as Vite.js.
 
@@ -107,6 +144,17 @@ If you want to ignore `.env` files and only use values in `process.env`, you can
 ```js
 EnvironmentPlugin(['API_KEY'], { loadEnvFiles: false }),
 ```
+
+## Acknowledgements
+
+I created this library only because I wanted something that:
+
+- Reused Vite's `loadEnv` functionality, making the library _very_ light (no dependencies).
+- Allowed to provide a subset of variables to expose, and their defaults.
+
+The following libraries might be helpful depending on your use case:
+
+- [vite-plugin-env-compatible](vite-plugin-env-compatible): Convenient if you are porting a Vue CLI or create-react-app. 
 
 ## License
 
