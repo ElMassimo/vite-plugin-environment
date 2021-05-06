@@ -20,6 +20,7 @@
 [define]: https://vitejs.dev/config/#define
 [Vite Ruby]: https://vite-ruby.netlify.app/config/#source-maps-%F0%9F%97%BA
 [meta env]: https://vitejs.dev/guide/env-and-mode.html#env-files
+[vite-plugin-env-compatible]: https://github.com/IndexXuan/vite-plugin-env-compatible
 
 ## Why? 🤔
 
@@ -156,7 +157,7 @@ I created this library only because I wanted something that:
 
 The following libraries might be helpful depending on your use case:
 
-- [vite-plugin-env-compatible](vite-plugin-env-compatible): Convenient if you are porting a Vue CLI or create-react-app. 
+- [vite-plugin-env-compatible]: Convenient if you are porting a Vue CLI or create-react-app. 
 
 ## License
 
