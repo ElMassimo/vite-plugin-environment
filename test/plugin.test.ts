@@ -2,6 +2,7 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import glob from 'fast-glob'
 import { build, InlineConfig } from 'vite'
+import { describe, test, expect } from 'vitest'
 
 type Fixture = 'a' | 'b' | 'c'
 
@@ -13,7 +14,7 @@ function compiledApp (name: Fixture) {
 
 async function buildFixture (name: Fixture, options?: InlineConfig) {
   const root = join(__dirname, 'fixtures', name)
-  await build({ root, ...options })
+  await build({ root, logLevel: 'warn', ...options })
 }
 
 describe('keys', () => {

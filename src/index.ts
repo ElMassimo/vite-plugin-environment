@@ -73,7 +73,7 @@ function throwMissingKeyError (key: string) {
 export default function EnvironmentPlugin (vars: EnvVars, options: EnvOptions = {}): Plugin {
   const { prefix = '', defineOn = 'process.env', loadEnvFiles = true } = options
   return {
-    name: 'process-env-variables',
+    name: 'vite-plugin-environment',
     config ({ root = process.cwd() }, { mode }) {
       const env = loadEnvFiles ? loadEnv(mode, root, prefix) : loadProcessEnv(prefix)
       const keys = vars === 'all' ? Object.keys(env) : Array.isArray(vars) ? vars : Object.keys(vars)

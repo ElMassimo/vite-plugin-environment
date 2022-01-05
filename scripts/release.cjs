@@ -5,10 +5,10 @@
  */
 const path = require('path')
 const fs = require('fs')
-const execa = require('execa')
+const spawn = require('cross-spawn')
 const args = require('minimist')(process.argv.slice(2))
 const semver = require('semver')
-const chalk = require('chalk')
+const colors = require('picocolors')
 const { prompt } = require('enquirer')
 
 const name = 'vite-plugin-environment'
@@ -49,8 +49,8 @@ function inc (i) {
  * @param {string[]} args
  * @param {object} opts
  */
-async function run (bin, args, opts = {}) {
-  return execa(bin, args, { stdio: 'inherit', ...opts })
+function run (bin, args, opts = {}) {
+  return spawn.sync(bin, args, { stdio: 'inherit', ...opts })
 }
 
 /**
@@ -58,15 +58,15 @@ async function run (bin, args, opts = {}) {
  * @param {string[]} args
  * @param {object} opts
  */
-async function dryRun (bin, args, opts = {}) {
-  console.log(chalk.blue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
+function dryRun (bin, args, opts = {}) {
+  console.log(colors.blue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
 }
 
 /**
  * @param {string} msg
  */
 function step (msg) {
-  console.log(chalk.cyan(msg))
+  console.log(colors.cyan(msg))
 }
 
 /**
@@ -123,7 +123,8 @@ async function main () {
     targetVersion = release.match(/\((.*)\)/)[1]
   }
 
-  if (!semver.valid(targetVersion)) throw new Error(`invalid target version: ${targetVersion}`)
+  if (!semver.valid(targetVersion))
+    throw new Error(`invalid target version: ${targetVersion}`)
 
   const tag = `${name}@${targetVersion}`
 
@@ -136,23 +137,26 @@ async function main () {
     message: `Releasing ${tag}. Confirm?`,
   })
 
-  if (!yes) return
+  if (!yes)
+    return
 
   step(`\nUpdating ${pkg.type} version...`)
   pkg.updateVersion(targetVersion)
 
   step(`\nBuilding ${pkg.type}...`)
-  if (!skipBuild && !isDryRun) await run('pnpm', ['build'], { cwd: resolve('.') })
-  else console.log('(skipped)')
+  if (!skipBuild && !isDryRun)
+    run('pnpm', ['build'], { cwd: resolve('.') })
+  else
+    console.log('(skipped)')
 
   step('\nGenerating changelog...')
-  await run('pnpm', ['changelog'])
+  runIfNotDry('pnpm', ['changelog', name])
 
-  const { stdout } = await run('git', ['diff'], { stdio: 'pipe' })
+  const { stdout } = run('git', ['diff'], { stdio: 'pipe' })
   if (stdout) {
     step('\nCommitting changes...')
-    await runIfNotDry('git', ['add', '-A'])
-    await runIfNotDry('git', ['commit', '-m', `release: ${tag}`])
+    runIfNotDry('git', ['add', '-A'])
+    runIfNotDry('git', ['commit', '-m', `release: ${tag}`])
   }
   else {
     console.log('No changes to commit.')
@@ -162,9 +166,10 @@ async function main () {
   await publishPackage(targetVersion, runIfNotDry)
 
   step('\nPushing to GitHub...')
-  await runIfNotDry('git', ['push'])
+  runIfNotDry('git', ['push'])
 
-  if (isDryRun) console.log(`\nDry run finished - run git diff to see ${pkg.type} changes.`)
+  if (isDryRun)
+    console.log(`\nDry run finished - run git diff to see ${pkg.type} changes.`)
 
   console.log()
 }
@@ -175,15 +180,17 @@ async function main () {
  */
 async function publishPackage (version, runIfNotDry) {
   try {
-    await runIfNotDry('pnpm', ['publish'], {
+    runIfNotDry('pnpm', ['publish'], {
       stdio: 'inherit',
       cwd: resolve('.'),
     })
-    console.log(chalk.green(`Successfully published ${name}@${version}`))
+    console.log(colors.green(`Successfully published ${name}@${version}`))
   }
   catch (e) {
-    if (e.stderr.match(/previously published/)) console.log(chalk.red(`Skipping already published: ${name}`))
-    else throw e
+    if (e.stderr.match(/previously published/))
+      console.log(colors.red(`Skipping already published: ${name}`))
+    else
+      throw e
   }
 }
 
