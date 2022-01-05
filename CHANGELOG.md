@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.0.1...v1.1.0) (2022-01-05)
+
+
+### Bug Fixes
+
+* default export when used in a `"type": "module"` vite project ([151f8f7](https://github.com/ElMassimo/vite-plugin-environment/commit/151f8f7a5bab4e821e8edf7f93c51aecff2cec47))
+
+
+
 ## [1.0.1](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.0.0...v1.0.1) (2021-05-04)
 
 
