@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { loadEnv } from 'vite'
 import type { Plugin } from 'vite'
 
@@ -74,8 +75,11 @@ export default function EnvironmentPlugin (vars: EnvVars, options: EnvOptions = 
   const { prefix = '', defineOn = 'process.env', loadEnvFiles = true } = options
   return {
     name: 'vite-plugin-environment',
-    config ({ root = process.cwd() }, { mode }) {
-      const env = loadEnvFiles ? loadEnv(mode, root, prefix) : loadProcessEnv(prefix)
+    config ({ root = process.cwd(), envDir }, { mode }) {
+      const resolvedRoot = resolve(root)
+      envDir = envDir ? resolve(resolvedRoot, envDir) : resolvedRoot
+
+      const env = loadEnvFiles ? loadEnv(mode, envDir, prefix) : loadProcessEnv(prefix)
       const keys = vars === 'all' ? Object.keys(env) : Array.isArray(vars) ? vars : Object.keys(vars)
       const defaultValues = vars === 'all' || Array.isArray(vars) ? {} : vars
       return { define: defineEnvVars(env, defineOn, keys, defaultValues) }

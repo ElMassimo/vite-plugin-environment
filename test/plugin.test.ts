@@ -91,4 +91,12 @@ describe('advanced options', () => {
     expect(compiledApp('c')).toContain('window.apiKey="d2fab04aacaad208"')
     done()
   })
+
+  test('uses envDir when specified', async (done) => {
+    expect.assertions(2)
+    await buildFixture('c', { mode: 'development', envDir: 'alt' })
+    expect(compiledApp('c')).toContain('console.log("v4")')
+    expect(compiledApp('c')).toContain('window.apiKey="c2fab04aacaad2089"')
+    done()
+  })
 })
