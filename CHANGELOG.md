@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.1.0...v1.1.1) (2022-04-11)
+
+
+### Features
+
+* use `envDir` to resolve `.env` files when specified ([1768692](https://github.com/ElMassimo/vite-plugin-environment/commit/176869250f139ea4434924e578e097541aec2b77))
+
+
+
 # [1.1.0](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.0.1...v1.1.0) (2022-01-05)
 
 

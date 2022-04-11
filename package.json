@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-environment",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Easily expose environment variables in Vite.js",
   "keywords": [
     "env",
