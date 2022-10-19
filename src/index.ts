@@ -15,13 +15,13 @@ import type { Plugin } from 'vite'
  * process.env values are strings, and the inconsistency would make it easy to
  * introduce sutble bugs.
  */
-type EnvVarDefault = string | null | undefined
+export type EnvVarDefault = string | null | undefined
 
-type EnvVarDefaults = Record<string, EnvVarDefault>
+export type EnvVarDefaults = Record<string, EnvVarDefault>
 
-type EnvVars = 'all' | string[] | EnvVarDefaults
+export type EnvVars = 'all' | string[] | EnvVarDefaults
 
-interface EnvOptions {
+export interface EnvOptions {
   /**
    * Only variables that match this prefix will be made available.
    * @default ''
