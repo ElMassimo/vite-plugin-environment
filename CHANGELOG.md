@@ -1,3 +1,12 @@
+## [1.1.3](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.1.2...v1.1.3) (2022-10-19)
+
+
+### Features
+
+* expose types ([6b9a73c](https://github.com/ElMassimo/vite-plugin-environment/commit/6b9a73c5222e6045fbaea7d47f56e72ebac11bfc))
+
+
+
 ## [1.1.2](https://github.com/ElMassimo/vite-plugin-environment/compare/v1.1.1...v1.1.2) (2022-07-14)
 
 
