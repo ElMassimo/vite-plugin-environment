@@ -9,7 +9,7 @@ type Fixture = 'a' | 'b' | 'c'
 
 function compiledApp (name: Fixture) {
   const distPath = join(__dirname, 'fixtures', name, 'dist')
-  const files = glob.sync('assets/app.*.js', { cwd: distPath })
+  const files = glob.sync('assets/app-*.js', { cwd: distPath })
   return readFileSync(join(distPath, files[0]), { encoding: 'utf8' })
 }
 
@@ -67,7 +67,7 @@ describe('advanced options', () => {
 
   test('replaces the variables without failing', async () => {
     await buildFixture('c', { mode: 'production' })
-    expect(compiledApp('c')).toContain('console.log({BASE_URL:"/",MODE:"production",DEV:!1,PROD:!0}.VUE_APP_VERSION)')
+    expect(compiledApp('c')).toContain('var a={BASE_URL:"/",MODE:"production",DEV:!0,PROD:!1,SSR:!1};console.log(a.VUE_APP_VERSION)')
     expect(compiledApp('c')).toContain('window.apiKey="d2fab04aacaad208"')
   })
 
