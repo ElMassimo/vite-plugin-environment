@@ -17,7 +17,7 @@
 [migration]: https://vite-ruby.netlify.app/guide/migration.html#migrating-to-vite
 [vite.js]: http://vitejs.dev/
 [EnvironmentPlugin]: https://webpack.js.org/plugins/environment-plugin/
-[define]: https://vitejs.dev/config/#define
+[define]: https://vite.dev/config/shared-options.html#define
 [Vite Ruby]: https://vite-ruby.netlify.app/config/#source-maps-%F0%9F%97%BA
 [meta env]: https://vitejs.dev/guide/env-and-mode.html#env-files
 [vite-plugin-env-compatible]: https://github.com/IndexXuan/vite-plugin-env-compatible
