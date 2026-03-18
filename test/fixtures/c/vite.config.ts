@@ -4,7 +4,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 
 export default defineConfig({
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: [resolve(__dirname, './app.js')],
     },
   },

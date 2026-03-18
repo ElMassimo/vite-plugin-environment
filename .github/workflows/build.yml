@@ -9,21 +9,20 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [18.x, 20.x]
+        node: [20.x, 22.x]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
-      - uses: pnpm/action-setup@v1.2.1
+      - uses: pnpm/action-setup@v4
         with:
-          version: 5.13.6
           run_install: |
             - recursive: false
 
@@ -39,16 +38,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 14.x
+          node-version: 22.x
 
-      - uses: pnpm/action-setup@v1.2.1
+      - uses: pnpm/action-setup@v4
         with:
-          version: 5.13.6
           run_install: |
             - recursive: false
 

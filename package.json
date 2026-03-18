@@ -15,26 +15,23 @@
     "dist"
   ],
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
     }
   },
   "scripts": {
-    "lint": "eslint .",
-    "test": "vitest",
-    "dev": "npm run build -- --watch",
-    "build": "tsup src/index.ts --dts --format cjs,esm --clean",
+    "lint": "vp lint",
+    "test": "vp test",
+    "dev": "vp pack --watch",
+    "build": "vp pack",
     "release": "node scripts/release.cjs",
-    "postinstall": "husky install",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "prepublishOnly": "pinst --disable && npm run build",
-    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags && pinst --enable"
+    "changelog": "conventional-changelog-cli -p angular -i CHANGELOG.md -s",
+    "prepublishOnly": "npm run build",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -45,37 +42,18 @@
   "author": "Máximo Mussini <maximomussini@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@mussi/eslint-config": "^0.5.1",
-    "@types/node": "^18",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@types/node": "^22",
     "conventional-changelog-cli": "^2.2.2",
     "cross-spawn": "^7.0.3",
     "enquirer": "^2.3.6",
-    "eslint": "^7.32.0",
-    "fast-glob": "^3.2.11",
-    "husky": "^5.2.0",
-    "lint-staged": "^10.5.4",
     "minimist": "^1.2.6",
     "picocolors": "^1.0.0",
-    "pinst": "^2.1.6",
-    "rollup": "^2.70.1",
     "semver": "^7.3.5",
-    "tsup": "^8",
-    "typescript": "^4.6.3",
-    "vite": "^5.0.5",
-    "vitest": "^1.0.2"
+    "typescript": "^5.0.0",
+    "vite": "^8.0.0",
+    "vite-plus": "^0.1.12"
   },
   "peerDependencies": {
-    "vite": ">= 5.0"
-  },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "eslint --fix"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "@mussi/eslint-config"
-    ]
+    "vite": ">= 8.0"
   }
 }
