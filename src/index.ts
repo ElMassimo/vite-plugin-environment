@@ -41,6 +41,9 @@ export interface EnvOptions {
   loadEnvFiles?: boolean
 }
 
+// esbuild/rolldown reject define keys that are not JS identifiers (Windows `ProgramFiles(x86)`).
+const IDENTIFIER_RE = /^[A-Za-z_$][\w$]*$/
+
 function defineEnvVars (env: EnvVarDefaults, defineOn: string, keys: string[], defaultValues: EnvVarDefaults) {
   return keys.reduce((vars, key) => {
     const value = env[key] === undefined ? defaultValues[key] : env[key]
@@ -80,7 +83,9 @@ export default function EnvironmentPlugin (vars: EnvVars, options: EnvOptions = 
       envDir = envDir ? resolve(resolvedRoot, envDir) : resolvedRoot
 
       const env = loadEnvFiles ? loadEnv(mode, envDir, prefix) : loadProcessEnv(prefix)
-      const keys = vars === 'all' ? Object.keys(env) : Array.isArray(vars) ? vars : Object.keys(vars)
+      const keys = vars === 'all'
+        ? Object.keys(env).filter(key => IDENTIFIER_RE.test(key))
+        : Array.isArray(vars) ? vars : Object.keys(vars)
       const defaultValues = vars === 'all' || Array.isArray(vars) ? {} : vars
       return { define: defineEnvVars(env, defineOn, keys, defaultValues) }
     },
