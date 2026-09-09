@@ -1,10 +1,10 @@
 import { readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { build } from 'vite'
+import { build, resolveConfig } from 'vite'
 import type { InlineConfig } from 'vite'
 import { describe, test, expect } from 'vite-plus/test'
 
-type Fixture = 'a' | 'b' | 'c'
+type Fixture = 'a' | 'b' | 'c' | 'd'
 
 function compiledApp (name: Fixture) {
   const distPath = join(__dirname, 'fixtures', name, 'dist', 'assets')
@@ -83,3 +83,46 @@ describe('advanced options', () => {
     expect(compiledApp('c')).toContain('window.apiKey=`c2fab04aacaad2089`')
   })
 })
+
+describe('all: skip non-identifier env keys', () => {
+  const invalidKeys = ['ProgramFiles(x86)', 'FOO(bar)']
+
+  async function withInvalidEnv<T> (fn: () => T | Promise<T>): Promise<T> {
+    const previous = Object.fromEntries(invalidKeys.map(key => [key, process.env[key]]))
+    process.env['ProgramFiles(x86)'] = 'C:\\Program Files (x86)'
+    process.env['FOO(bar)'] = 'bad'
+    try {
+      return await fn()
+    }
+    finally {
+      for (const key of invalidKeys) {
+        if (previous[key] === undefined)
+          delete process.env[key]
+        else
+          process.env[key] = previous[key]
+      }
+    }
+  }
+
+  test('omits invalid identifiers from the define map', async () => {
+    await withInvalidEnv(async () => {
+      const config = await resolveConfig({
+        root: join(__dirname, 'fixtures', 'd'),
+        logLevel: 'warn',
+      }, 'build', 'production')
+      const define = config.define || {}
+      expect(define['process.env.ProgramFiles(x86)']).toBeUndefined()
+      expect(define['process.env.FOO(bar)']).toBeUndefined()
+      expect(Object.keys(define).some(key => key.includes('('))).toBe(false)
+      expect(define['process.env.APP_VERSION']).toBe(JSON.stringify('v2'))
+    })
+  })
+
+  test('production build does not crash when process.env has non-identifier keys', async () => {
+    await withInvalidEnv(async () => {
+      await buildFixture('d', { mode: 'production' })
+      expect(compiledApp('d')).toContain('console.log(`v2`)')
+    })
+  })
+})
+
